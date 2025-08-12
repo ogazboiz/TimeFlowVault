@@ -1,95 +1,105 @@
-# MorphStream
+# 🌊 MorphStream: Real-Time Finance, Powered by Morph
 
-Real-time, per-second money streaming on Morph Holesky. This repo contains:
-- `contracts/`: Solidity contract for creating, withdrawing from, and cancelling streams
-- `vite-project/`: React + Vite frontend with TailwindCSS
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
-## Prerequisites
-- Node.js 18+
-- npm 9+
-- MetaMask (or any EIP-1193 wallet)
+MorphStream is a protocol built to demonstrate the powerful, real-world use cases unlocked **exclusively by the Morph L2 architecture**. By enabling per-second money streaming, this project showcases a new financial paradigm that is fundamentally impossible on traditional Layer 1 blockchains due to prohibitive costs.
 
-## Contracts (Hardhat)
+---
 
-- Install:
+### ## 📺 Live Demo & Video
+
+* **Live dApp Link:** `[Link to your Vercel deployment will go here]`
+* **Demo Video:** `[Link to your YouTube or Loom demo video will go here]`
+
+---
+
+### ## ✨ The "Why Morph?" Vision
+
+The core question this project answers is: "What can we build on Morph that we simply cannot build anywhere else?"
+
+The answer is **real-time, per-second finance**.
+
+* **The Layer 1 Problem:** On Ethereum, a simple transaction can cost several dollars. Attempting to stream a salary or subscription payment would require thousands of micro-transactions, resulting in gas fees that are hundreds or even thousands of times greater than the amount being sent. This renders the entire concept of "per-second finance" economically absurd on Layer 1.
+
+* **The Morph Solution:** MorphStream leverages Morph's L2 architecture to provide **near-zero gas fees and high transaction throughput**. This efficiency is not just a "nice-to-have"—it is the **enabling technology** that transforms money streaming from a theoretical idea into a practical, powerful financial primitive. MorphStream is built on Morph because its core function is only viable on Morph.
+
+
+
+---
+
+### ## 🚀 Key Features
+
+* **Create Streams on Morph:** Lock ETH and initiate a continuous stream to any recipient, with each state change secured by the Morph network.
+* **On-Demand Withdrawals:** Recipients can withdraw their accrued funds at any time, with each withdrawal being a fast and cheap transaction on Morph.
+* **Cancelable Streams:** Senders or recipients can cancel an active stream, with funds fairly refunded through a low-cost Morph transaction.
+* **Real-Time Balance Display:** The UI showcases the power of continuous streams, with balances accruing second by second.
+
+---
+
+### ## 🛠️ Technology Stack
+
+* **Blockchain:** **Morph Holesky Testnet**
+* **Smart Contracts:** Solidity, Hardhat
+* **Frontend:** React (Vite), JavaScript
+* **Blockchain Interaction:** Ethers.js
+* **Deployment:** Vercel (Frontend)
+
+---
+
+### ## 🏁 Getting Started
+
+To run this project locally, follow these steps.
+
+#### Prerequisites
+
+* [Node.js](https://nodejs.org/) (v18 or later)
+* [MetaMask](https://metamask.io/) browser extension configured for the Morph Holesky Testnet.
+
+#### 1. Backend Setup
+
 ```bash
+# Clone the repository
+git clone [Your GitHub Repo URL]
+cd MorphStream-Submission/backend
+
+# Install dependencies
 npm install
-```
 
-- Compile & Test:
-```bash
-npx hardhat compile
-npx hardhat test
-```
+# Create a .env file in the 'backend' directory
+# and add your details
+Your backend/.env file should look like this:
 
-- Deploy (example using Ignition template provided):
-```bash
-npx hardhat ignition deploy ./ignition/modules/Lock.js
-```
+MORPH_RPC_URL="[https://rpc-quicknode-holesky.morphl2.io](https://rpc-quicknode-holesky.morphl2.io)"
+PRIVATE_KEY="YOUR_METAMASK_PRIVATE_KEY_HERE"
+2. Frontend Setup
+Bash
 
-Update your deployed `MorphStream` address in the frontend environment (below).
+# From the root folder, navigate to the frontend
+cd ../frontend
 
-## Frontend (Vite + React)
-
-- Setup:
-```bash
-cd vite-project
+# Install dependencies
 npm install
-```
+You will also need to add your deployed contract details to the frontend. Create a file at frontend/src/contractInfo.js and add the following:
 
-- Configure environment (create `vite-project/.env`):
-```bash
-VITE_CONTRACT_ADDRESS=0xYourDeployedAddress
-VITE_TARGET_CHAIN_ID=2810
-```
+JavaScript
 
-- Run dev server:
-```bash
+export const contractAddress = "YOUR_DEPLOYED_CONTRACT_ADDRESS";
+export const contractABI = [ /* PASTE YOUR ABI ARRAY HERE */ ];
+3. Running the Application
+Run the Frontend: From the frontend directory, run:
+
+Bash
+
 npm run dev
-```
+The application will be available at http://localhost:5173.
 
-- Build & Preview:
-```bash
-npm run build
-npm run preview
-```
+Note: Since the backend smart contract is already deployed on the Morph Holesky Testnet, you do not need to run a local Hardhat node. Simply connect your MetaMask to the Morph testnet.
 
-## dApp Features
-- Connect wallet and auto/suggest network switch to Morph Holesky
-- Create a money stream by specifying recipient, total amount (ETH), and duration (seconds)
-- Incoming/Outgoing streams dashboard with:
-  - Stream cards showing ID, participant, total, flow rate (ETH/s)
-  - Progress bar for elapsed duration
-  - Real-time claimable balance ticker (incoming)
-  - Withdraw/Cancel actions
-- Manual withdraw panel to check claimable balance by Stream ID and withdraw
-- Floating status toast with loading indicator and clear success/failure messages
 
-## Contract Notes
-`contracts/MorphStream.sol`:
-- Emits `StreamCreated`, `Withdrawn`, `StreamCancelled`
-- `createStream(recipient, duration)` is payable and computes `flowRate = msg.value / duration`
-  - Guard added: `flowRate > 0` to prevent zero-rate streams
-- `getClaimableBalance(streamId)` returns the currently claimable amount
-- `withdrawFromStream(streamId)` allows the recipient to withdraw accrued funds
-- `cancelStream(streamId)` refunds both parties proportionally and closes the stream
 
-## Configuration
-- Frontend reads the contract address from `VITE_CONTRACT_ADDRESS` (falls back to the hardcoded address in `src/contactInfo.js` if unset).
-- Target chain id is expected to be Morph Holesky (2810). Some wallets may report 2818; the app tolerates both.
 
-## Common Commands
-```bash
-# Contracts
-npx hardhat compile
-npx hardhat test
 
-# Frontend
-cd vite-project
-npm run dev
-npm run build && npm run preview
-```
 
-## Notes
-- For hackathon deployment, push both `contracts/` and `vite-project/` directories.
-- If you change networks or redeploy, update `VITE_CONTRACT_ADDRESS` and restart the dev server.
+
+
+
