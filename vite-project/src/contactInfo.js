@@ -1,10 +1,10 @@
-// 1. Paste your deployed contract address (can be overridden by VITE_CONTRACT_ADDRESS)
+// 1. Uses the Vercel Environment Variable if it exists, otherwise falls back to the hardcoded address for local development.
 export const contractAddress = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_CONTRACT_ADDRESS)
   ? import.meta.env.VITE_CONTRACT_ADDRESS
   : "0x29d52A54fA3f977a054557c40cD1B1d271996166";
 
-// 2. Paste the ABI of your contract
-export const contractABI = [ {
+// 2. Uses the Vercel Environment Variable for the ABI if it exists, otherwise falls back to the hardcoded ABI.
+const hardcodedABI = [ {
       "anonymous": false,
       "inputs": [
         {
@@ -226,3 +226,7 @@ export const contractABI = [ {
       "stateMutability": "nonpayable",
       "type": "function"
     }];
+
+export const contractABI = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_CONTRACT_ABI)
+  ? JSON.parse(import.meta.env.VITE_CONTRACT_ABI)
+  : hardcodedABI;
