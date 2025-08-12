@@ -45,7 +45,7 @@ export default function CreateStreamForm({
       </label>
 
       <div className="sm:col-span-2">
-        <button className="btn-primary w-full sm:w-auto" type="submit">Start Streaming</button>
+        <button className="btn-primary w-full sm:w-auto" type="submit" aria-label="Start money stream">Start Streaming</button>
       </div>
     </form>
   );

@@ -10,7 +10,7 @@ export default function Header({ walletAddress, chainId, networkName, onConnect 
                 MorphStream
               </span>
             </h1>
-            <p className="-mt-0.5 text-xs text-white/60">Real-time money streaming on {networkName || 'Morph'}</p>
+            <p className="-mt-0.5 text-xs text-white/60" aria-live="polite">Real-time money streaming on {networkName || 'Morph'}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

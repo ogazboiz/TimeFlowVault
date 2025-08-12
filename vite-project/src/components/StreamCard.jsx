@@ -5,7 +5,7 @@ export default function StreamCard({ stream, variant, formatEth, onWithdraw, onC
   const progressPct = Math.min(100, (elapsed / duration) * 100);
 
   return (
-    <div className={`card-glass relative overflow-hidden p-4 ${stream.isActive ? '' : 'opacity-70'} `}>
+    <div className={`card-glass relative overflow-hidden p-4 ${stream.isActive ? '' : 'opacity-70'} `} role="region" aria-label={`Stream ${stream.id}`}>
       <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-hero opacity-10 blur-2xl" />
       <div className="flex items-start justify-between gap-4">
         <div>

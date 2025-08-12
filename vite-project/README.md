@@ -1,4 +1,7 @@
 ## MorphStream Frontend
+Small notes:
+- Tailwind config is CJS (`tailwind.config.cjs`) for better Windows compatibility.
+- PostCSS config is CJS (`postcss.config.cjs`).
 
 ### Setup
 
