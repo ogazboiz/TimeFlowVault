@@ -1,14 +1,16 @@
 const hre = require("hardhat");
 
 async function main() {
-  console.log("Deploying MorphStream contract...");
-  const morphStream = await hre.ethers.deployContract("MorphStream");
+  console.log("Deploying TimeFlow contract...");
+  
+  const timeFlow = await hre.ethers.deployContract("TimeFlow");
 
-  await morphStream.waitForDeployment();
+  await timeFlow.waitForDeployment();
 
   console.log(
-    `MorphStream contract deployed to: ${morphStream.target}`
+    `TimeFlow contract deployed to: ${timeFlow.target}`
   );
+  console.log("TimeFlow: Real-time money streaming protocol");
 }
 
 main().catch((error) => {

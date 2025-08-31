@@ -1,0 +1,61 @@
+<svg width="480" height="480" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="480" height="480" rx="60" fill="url(#bg)"/>
+  
+  <!-- Main Circle -->
+  <circle cx="240" cy="240" r="120" fill="none" stroke="url(#accent)" stroke-width="8" opacity="0.8"/>
+  
+  <!-- Inner Circle -->
+  <circle cx="240" cy="240" r="80" fill="none" stroke="url(#accent)" stroke-width="4" opacity="0.6"/>
+  
+  <!-- Streaming Arrows -->
+  <g opacity="0.9">
+    <!-- Top Arrow -->
+    <path d="M 240 120 L 240 160 M 235 155 L 240 160 L 245 155" stroke="url(#accent)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Right Arrow -->
+    <path d="M 360 240 L 320 240 M 325 235 L 320 240 L 325 245" stroke="url(#accent)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Bottom Arrow -->
+    <path d="M 240 360 L 240 320 M 235 325 L 240 320 L 245 325" stroke="url(#accent)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Left Arrow -->
+    <path d="M 120 240 L 160 240 M 155 235 L 160 240 L 155 245" stroke="url(#accent)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Center Vault Symbol -->
+  <g opacity="0.9">
+    <!-- Vault Door -->
+    <rect x="220" y="200" width="40" height="60" rx="4" fill="url(#accent)" opacity="0.8"/>
+    
+    <!-- Vault Handle -->
+    <circle cx="240" cy="230" r="6" fill="white"/>
+    
+    <!-- Vault Lock -->
+    <rect x="235" y="245" width="10" height="8" rx="2" fill="white"/>
+  </g>
+  
+  <!-- Floating Particles -->
+  <g opacity="0.7">
+    <circle cx="180" cy="180" r="3" fill="url(#accent)"/>
+    <circle cx="300" cy="180" r="2" fill="url(#accent)"/>
+    <circle cx="180" cy="300" r="2" fill="url(#accent)"/>
+    <circle cx="300" cy="300" r="3" fill="url(#accent)"/>
+    <circle cx="150" cy="240" r="2" fill="url(#accent)"/>
+    <circle cx="330" cy="240" r="2" fill="url(#accent)"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="240" y="420" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white" opacity="0.9">TimeFlowVault</text>
+</svg>

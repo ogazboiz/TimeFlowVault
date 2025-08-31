@@ -1,4 +1,4 @@
-## MorphStream Frontend
+## TimeFlow Frontend
 Small notes:
 - Tailwind config is CJS (`tailwind.config.cjs`) for better Windows compatibility.
 - PostCSS config is CJS (`postcss.config.cjs`).
@@ -16,7 +16,7 @@ npm install
 Create a `.env` file in `vite-project/` with:
 ```
 VITE_CONTRACT_ADDRESS=0xYourDeployedAddress
-VITE_TARGET_CHAIN_ID=2810
+VITE_TARGET_CHAIN_ID=1
 ```
 
 3. Run

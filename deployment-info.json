@@ -1,0 +1,8 @@
+{
+  "contractAddress": "0x189C49B169DE610994b7CB4A185907cf84933614",
+  "vaultName": "TimeFlowVault on Lisk",
+  "initialRewardRate": 15,
+  "network": "lisk-testnet",
+  "deploymentTime": "2025-01-27T12:00:00.000Z",
+  "explorer": "https://sepolia-blockscout.lisk.com/address/0x189C49B169DE610994b7CB4A185907cf84933614"
+}
