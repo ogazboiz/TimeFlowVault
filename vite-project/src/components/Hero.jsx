@@ -3,10 +3,8 @@ import React, { useState, useEffect } from 'react';
 const Hero = ({ onConnect, onManualConnect }) => {
   const [currentNetwork, setCurrentNetwork] = useState('');
   const [isLiskTestnet, setIsLiskTestnet] = useState(false);
-  const [walletConflicts, setWalletConflicts] = useState([]);
-  const [rpcStatus, setRpcStatus] = useState('unknown');
 
-  // Check current network and wallet conflicts
+  // Check current network
   useEffect(() => {
     const checkNetwork = async () => {
       if (typeof window.ethereum !== 'undefined') {
@@ -21,63 +19,12 @@ const Hero = ({ onConnect, onManualConnect }) => {
             setCurrentNetwork(`Chain ID: ${parseInt(chainId, 16)}`);
           }
         } catch (error) {
-          console.error('Error checking network:', error);
           setCurrentNetwork('Unknown');
         }
       }
     };
 
-    const checkConflicts = () => {
-      const conflicts = [];
-      
-      // Check for multiple ethereum providers
-      if (window.ethereum?.providers && window.ethereum.providers.length > 1) {
-        conflicts.push(`Multiple wallet providers: ${window.ethereum.providers.length}`);
-      }
-      
-      // Check for specific conflicting extensions
-      if (window.ethereum && window.ethereum.isBraveWallet) {
-        conflicts.push('Brave Wallet detected');
-      }
-      
-      if (window.ethereum && window.ethereum.isCoinbaseWallet) {
-        conflicts.push('Coinbase Wallet detected');
-      }
-      
-      if (window.ethereum && window.ethereum.isTokenPocket) {
-        conflicts.push('TokenPocket detected');
-      }
-      
-      setWalletConflicts(conflicts);
-    };
-
-    const checkRPCStatus = async () => {
-      try {
-        const response = await fetch('https://rpc.sepolia-api.lisk.com', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            method: 'eth_chainId',
-            params: [],
-            id: 1
-          })
-        });
-        
-        if (response.ok) {
-          setRpcStatus('connected');
-        } else {
-          setRpcStatus('error');
-        }
-      } catch (error) {
-        console.error('RPC check failed:', error);
-        setRpcStatus('error');
-      }
-    };
-
     checkNetwork();
-    checkConflicts();
-    checkRPCStatus();
 
     // Listen for network changes
     if (typeof window.ethereum !== 'undefined') {
@@ -145,7 +92,7 @@ const Hero = ({ onConnect, onManualConnect }) => {
                 alert('Please install MetaMask first!');
               }
             }}
-            className="bg-slate-700 hover:bg-slate-700 text-white font-medium px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
+            className="bg-slate-700 hover:bg-slate-600 text-white font-medium px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
           >
             🔧 Add Lisk Testnet to MetaMask
           </button>
@@ -185,71 +132,33 @@ const Hero = ({ onConnect, onManualConnect }) => {
               </div>
             )}
             
-            {/* Get Test ETH Button */}
+            {/* Faucet Information */}
             <div className="mt-4">
-              <a
-                href="https://faucet.sepolia.lisk.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-xl transition-all duration-300"
-              >
-                🚰 Get Test ETH (Faucet)
-              </a>
-              <p className="text-slate-400 text-xs mt-2">
-                Need testnet ETH? Use the Lisk Sepolia faucet
-              </p>
-            </div>
-            
-            {/* RPC Status */}
-            <div className="mt-4">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border ${
-                rpcStatus === 'connected' 
-                  ? 'bg-green-500/20 border-green-500/50 text-green-300' 
-                  : rpcStatus === 'error'
-                  ? 'bg-red-500/20 border-red-500/50 text-red-300'
-                  : 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${
-                  rpcStatus === 'connected' ? 'bg-green-400' : rpcStatus === 'error' ? 'bg-red-400' : 'bg-yellow-400'
-                }`}></div>
-                <span className="text-sm font-medium">
-                  RPC Status: {rpcStatus === 'connected' ? 'Connected' : rpcStatus === 'error' ? 'Connection Error' : 'Checking...'}
-                </span>
-              </div>
-              {rpcStatus === 'connected' && (
-                <p className="text-green-300 text-xs mt-2">
-                  ✅ Using reliable RPC endpoint: rpc.sepolia-api.lisk.com (0.712s latency)
+              <div className="bg-blue-500/20 border border-blue-500/50 rounded-xl p-4 text-left">
+                <h4 className="text-blue-300 font-semibold mb-2">💧 Need Test ETH?</h4>
+                <p className="text-blue-200 text-sm mb-3">
+                  Use the official Lisk faucet to get testnet ETH for free:
                 </p>
-              )}
-              {rpcStatus === 'error' && (
-                <p className="text-red-300 text-xs mt-2">
-                  Lisk testnet RPC endpoint may be experiencing issues. Try again in a few minutes.
-                </p>
-              )}
-            </div>
-            
-            {/* Wallet Conflicts Warning */}
-            {walletConflicts.length > 0 && (
-              <div className="mt-6">
-                <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-4 text-left">
-                  <h4 className="text-red-300 font-semibold mb-2">⚠️ Wallet Extension Conflicts Detected</h4>
-                  <ul className="text-red-200 text-sm space-y-1">
-                    {walletConflicts.map((conflict, index) => (
-                      <li key={index}>• {conflict}</li>
-                    ))}
-                  </ul>
-                  <p className="text-red-300 text-xs mt-3">
-                    <strong>Solution:</strong> Disable other Ethereum wallet extensions and keep only MetaMask, then refresh the page.
-                  </p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-300"
+                <div className="space-y-2">
+                  <a
+                    href="https://sepolia-faucet.lisk.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-colors duration-300 text-sm"
                   >
-                    🔄 Refresh Page
-                  </button>
+                    🚰 Lisk Sepolia Faucet
+                  </a>
+                  <a
+                    href="https://www.l2faucet.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition-colors duration-300 text-sm ml-2"
+                  >
+                    🌐 Alternative Faucet
+                  </a>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>

@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-const Header = ({ account, isConnected, onConnect, onDebugNetwork, onResolveConflicts, onDebugRPC }) => {
+const Header = ({ account, isConnected, onConnect, onNavigate, activeTab, onDebugNetwork, onResolveConflicts, onDebugRPC }) => {
   const [currentNetwork, setCurrentNetwork] = useState('');
   const [isLiskTestnet, setIsLiskTestnet] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const formatAddress = (address) => {
     if (!address) return '';
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
+  // Handle navigation
+  const handleNavigation = (tab) => {
+    if (onNavigate) {
+      onNavigate(tab);
+    }
+    // Close mobile menu after navigation
+    setIsMobileMenuOpen(false);
   };
 
   // Check current network
@@ -61,16 +71,48 @@ const Header = ({ account, isConnected, onConnect, onDebugNetwork, onResolveConf
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#streaming" className="text-slate-300 hover:text-white transition-colors duration-300">
+            <button
+              onClick={() => handleNavigation('streaming')}
+              className={`relative text-slate-300 hover:text-white transition-colors duration-300 hover:scale-105 transform ${
+                activeTab === 'streaming' ? 'text-white' : ''
+              }`}
+            >
               🌊 Streaming
-            </a>
-            <a href="#staking" className="text-slate-300 hover:text-white transition-colors duration-300">
+              {activeTab === 'streaming' && (
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"></div>
+              )}
+            </button>
+            <button
+              onClick={() => handleNavigation('staking')}
+              className={`relative text-slate-300 hover:text-white transition-colors duration-300 hover:scale-105 transform ${
+                activeTab === 'staking' ? 'text-white' : ''
+              }`}
+            >
               🏦 Staking
-            </a>
-            <a href="#about" className="text-slate-300 hover:text-white transition-colors duration-300">
+              {activeTab === 'staking' && (
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"></div>
+              )}
+            </button>
+            <button
+              onClick={() => handleNavigation('about')}
+              className={`relative text-slate-300 hover:text-white transition-colors duration-300 hover:scale-105 transform ${
+                activeTab === 'about' ? 'text-white' : ''
+              }`}
+            >
               ℹ️ About
-            </a>
+              {activeTab === 'about' && (
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-full"></div>
+              )}
+            </button>
           </nav>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden text-slate-300 hover:text-white transition-colors duration-300 p-2"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
 
           {/* Connect Button / Account Info */}
           <div className="flex items-center gap-4">
@@ -148,6 +190,46 @@ const Header = ({ account, isConnected, onConnect, onDebugNetwork, onResolveConf
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-slate-800/95 backdrop-blur-md border-t border-slate-700/50">
+          <div className="container mx-auto px-4 py-4">
+            <nav className="flex flex-col space-y-4">
+              <button
+                onClick={() => handleNavigation('streaming')}
+                className={`text-left py-3 px-4 rounded-xl transition-all duration-300 ${
+                  activeTab === 'streaming'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                }`}
+              >
+                🌊 Streaming
+              </button>
+              <button
+                onClick={() => handleNavigation('staking')}
+                className={`text-left py-3 px-4 rounded-xl transition-all duration-300 ${
+                  activeTab === 'staking'
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                }`}
+              >
+                🏦 Staking
+              </button>
+              <button
+                onClick={() => handleNavigation('about')}
+                className={`text-left py-3 px-4 rounded-xl transition-all duration-300 ${
+                  activeTab === 'about'
+                    ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                }`}
+              >
+                ℹ️ About
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

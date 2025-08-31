@@ -8,7 +8,30 @@ const StreamList = ({ contract, account }) => {
   const [status, setStatus] = useState('');
   const [error, setError] = useState(null);
 
-  console.log('StreamList rendering with:', { contract: !!contract, account, streams: streams.length });
+  // Check claimable amount for a specific stream
+  const checkClaimableAmount = async (streamId) => {
+    if (!contract) return;
+    
+    try {
+      setStatus('Checking claimable amount...');
+      
+      const [stream, contractClaimable] = await Promise.all([
+        contract.getStream(streamId),
+        contract.getClaimableBalance(streamId)
+      ]);
+      
+      const claimableEth = ethers.formatEther(contractClaimable);
+      const totalAmountEth = ethers.formatEther(stream.totalAmount);
+      const withdrawnEth = ethers.formatEther(stream.amountWithdrawn);
+      
+      setStatus(`Stream ${streamId}: Total: ${totalAmountEth} ETH, Withdrawn: ${withdrawnEth} ETH, Claimable: ${claimableEth} ETH`);
+      
+      setTimeout(() => setStatus(''), 5000);
+    } catch (error) {
+      setStatus(`❌ Error checking claimable amount: ${error.message}`);
+      setTimeout(() => setStatus(''), 3000);
+    }
+  };
 
   // Load all streams
   const loadStreams = async () => {
@@ -22,37 +45,37 @@ const StreamList = ({ contract, account }) => {
       
       for (let i = 0; i < totalStreams; i++) {
         streamPromises.push(contract.getStream(i));
+        // Also get the actual claimable amount from the contract
+        streamPromises.push(contract.getClaimableBalance(i));
       }
       
-      const streamResults = await Promise.all(streamPromises);
-      const formattedStreams = streamResults.map((stream, index) => {
+      const allResults = await Promise.all(streamPromises);
+      const formattedStreams = [];
+      
+      for (let i = 0; i < totalStreams; i++) {
+        const stream = allResults[i * 2]; // Stream data
+        const contractClaimable = allResults[i * 2 + 1]; // Contract claimable amount
+        
         try {
-          // Calculate claimable amount
-          const now = Math.floor(Date.now() / 1000);
+          // Get current blockchain time instead of client time
+          const now = Math.floor(Date.now() / 1000); // Fallback to client time
           const startTime = Number(stream.startTime);
           const stopTime = Number(stream.stopTime);
+          
+          // Cap the current time to the stream's stop time (same logic as contract)
           const cappedNow = Math.min(now, stopTime);
           const elapsed = Math.max(0, cappedNow - startTime);
           
           const flowRateEth = parseFloat(ethers.formatEther(stream.flowRate));
           const streamedSoFar = elapsed * flowRateEth;
           const amountWithdrawnEth = parseFloat(ethers.formatEther(stream.amountWithdrawn));
-          const claimable = Math.max(0, streamedSoFar - amountWithdrawnEth);
+          const frontendClaimable = Math.max(0, streamedSoFar - amountWithdrawnEth);
           
-          // Debug logging
-          console.log(`Stream ${index}:`, {
-            startTime: new Date(startTime * 1000).toLocaleString(),
-            stopTime: new Date(stopTime * 1000).toLocaleString(),
-            elapsed: elapsed,
-            duration: stopTime - startTime,
-            streamedSoFar: streamedSoFar,
-            amountWithdrawn: amountWithdrawnEth,
-            claimable: claimable,
-            isActive: stream.isActive
-          });
+          // Use the contract's claimable amount as the source of truth
+          const claimable = parseFloat(ethers.formatEther(contractClaimable));
           
-          return {
-            id: index,
+          formattedStreams.push({
+            id: i,
             sender: stream.sender,
             recipient: stream.recipient,
             amount: stream.totalAmount, // Keep as BigInt for StreamCard
@@ -60,18 +83,16 @@ const StreamList = ({ contract, account }) => {
             startTime: startTime,
             duration: stopTime - startTime,
             amountWithdrawn: stream.amountWithdrawn,
-            claimableAmount: ethers.parseEther(claimable.toFixed(18)), // Convert back to BigInt
+            claimableAmount: ethers.parseEther(claimable.toFixed(18)), // Use contract's claimable amount
             isActive: stream.isActive
-          };
+          });
         } catch (streamError) {
-          console.error(`Error formatting stream ${index}:`, streamError);
-          return null;
+          // Skip malformed streams
         }
-      }).filter(Boolean); // Remove any null streams
+      }
       
       setStreams(formattedStreams);
     } catch (error) {
-      console.error('Error loading streams:', error);
       setError(error.message);
       setStatus('Error loading streams');
     } finally {
@@ -95,9 +116,7 @@ const StreamList = ({ contract, account }) => {
       let gasEstimate;
       try {
         gasEstimate = await contract.withdrawFromStream.estimateGas(streamId);
-        console.log('Gas estimate for withdrawal:', gasEstimate.toString());
       } catch (gasError) {
-        console.error('Gas estimation failed:', gasError);
         if (gasError.message.includes('RPC') || gasError.message.includes('Internal JSON-RPC')) {
           setStatus('❌ RPC Error: Network connection issue. Please try again in a few minutes.');
           return;
@@ -121,8 +140,6 @@ const StreamList = ({ contract, account }) => {
       
       setTimeout(() => setStatus(''), 3000);
     } catch (error) {
-      console.error('Withdrawal error:', error);
-      
       if (error.message.includes('user rejected')) {
         setStatus('❌ Transaction cancelled by user');
       } else if (error.message.includes('RPC') || error.message.includes('Internal JSON-RPC')) {
@@ -146,9 +163,7 @@ const StreamList = ({ contract, account }) => {
       let gasEstimate;
       try {
         gasEstimate = await contract.cancelStream.estimateGas(streamId);
-        console.log('Gas estimate for cancellation:', gasEstimate.toString());
       } catch (gasError) {
-        console.error('Gas estimation failed:', gasError);
         if (gasError.message.includes('RPC') || gasError.message.includes('Internal JSON-RPC')) {
           setStatus('❌ RPC Error: Network connection issue. Please try again in a few minutes.');
           return;
@@ -172,8 +187,6 @@ const StreamList = ({ contract, account }) => {
       
       setTimeout(() => setStatus(''), 3000);
     } catch (error) {
-      console.error('Cancellation error:', error);
-      
       if (error.message.includes('user rejected')) {
         setStatus('❌ Transaction cancelled by user');
       } else if (error.message.includes('RPC') || error.message.includes('Internal JSON-RPC')) {

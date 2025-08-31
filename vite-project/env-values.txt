@@ -1,0 +1,26 @@
+COPY THESE VALUES TO VERCEL ENVIRONMENT VARIABLES:
+
+VITE_CONTRACT_ADDRESS=0x189C49B169DE610994b7CB4A185907cf84933614
+
+VITE_LISK_CHAIN_ID=0x106A
+
+VITE_LISK_CHAIN_NAME=Lisk Sepolia Testnet
+
+VITE_LISK_RPC_URL=https://rpc.sepolia-api.lisk.com
+
+VITE_LISK_BLOCK_EXPLORER=https://sepolia-blockscout.lisk.com
+
+VITE_APP_NAME=TimeFlowVault
+
+VITE_APP_DESCRIPTION=Money Streaming + DeFi Vault on Lisk Blockchain
+
+VITE_APP_VERSION=1.0.0
+
+---
+INSTRUCTIONS:
+1. Go to Vercel Dashboard
+2. Select your project
+3. Go to Settings → Environment Variables
+4. Copy each line above (Name = left side, Value = right side)
+5. Set Environment to "Production"
+6. Click Add for each variable

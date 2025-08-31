@@ -25,7 +25,7 @@ const StakingInterface = ({ contract, account, onStakeChange }) => {
         setClaimableRewards(ethers.formatEther(rewards));
       }
     } catch (error) {
-      console.error('Error loading user stake:', error);
+      // Handle error silently
     }
   };
 

@@ -74,7 +74,6 @@ const CreateStreamForm = ({ contract, onStreamCreated, onLoadBalance, onRecreate
           const balanceEth = ethers.formatEther(balance);
           setUserBalance(balanceEth);
         } catch (error) {
-          console.error('Error loading balance:', error);
           setUserBalance('0');
         }
       } else if (contract && contract.provider) {
@@ -85,7 +84,6 @@ const CreateStreamForm = ({ contract, onStreamCreated, onLoadBalance, onRecreate
           const balanceEth = ethers.formatEther(balance);
           setUserBalance(balanceEth);
         } catch (error) {
-          console.error('Fallback balance loading failed:', error);
           setUserBalance('0');
         }
       }
@@ -166,7 +164,6 @@ const CreateStreamForm = ({ contract, onStreamCreated, onLoadBalance, onRecreate
       
       setTimeout(() => setStatus(''), 3000);
     } catch (error) {
-      console.error('Error creating stream:', error);
       setStatus(`❌ Error: ${error.message}`);
     } finally {
       setIsLoading(false);

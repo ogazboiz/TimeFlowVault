@@ -101,6 +101,7 @@ const StreamCard = ({ stream, account, onWithdraw, onCancel, isActive }) => {
             <div className="text-2xl font-bold text-green-400">
               {parseFloat(ethers.formatEther(stream.claimableAmount)).toFixed(6)} ETH
             </div>
+
           </div>
 
           {/* Action Buttons */}
